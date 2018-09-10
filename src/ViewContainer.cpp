@@ -117,6 +117,13 @@ TabbedViewContainer::TabbedViewContainer(ViewManager *connectedViewManager, QWid
     );
     editAction->setObjectName(QStringLiteral("edit-rename"));
 
+    auto closeOtherAction = _contextPopupMenu->addAction(
+            QIcon::fromTheme(QStringLiteral("edit-rename")),
+            i18nc("@action:inmenu", "&Clother other..."), this,
+            [this]{ closeOtherTerminalTab(_contextMenuTabIndex); }
+    );
+    closeOtherAction->setObjectName(QStringLiteral("edit-rename"));
+
     auto closeAction = _contextPopupMenu->addAction(
         QIcon::fromTheme(QStringLiteral("tab-close")),
         i18nc("@action:inmenu", "Close Tab"), this,
@@ -423,6 +430,17 @@ void TabbedViewContainer::updateIcon(ViewProperties *item)
         const int index = indexOf(widget);
         setTabIcon(index, item->icon());
     }
+}
+#include <iostream>
+void TabbedViewContainer::closeOtherTerminalTab(int except_idx) {
+    int rm_cnt = count();
+    setCurrentIndex(except_idx);
+    for (int i = 0 ; i < rm_cnt ; i++) {
+        if (i == except_idx)
+            continue;
+        closeTerminalTab(i);
+    }
+
 }
 
 void TabbedViewContainer::closeTerminalTab(int idx) {
