@@ -124,6 +124,14 @@ TabbedViewContainer::TabbedViewContainer(ViewManager *connectedViewManager, QWid
     );
     closeOtherAction->setObjectName(QStringLiteral("edit-rename"));
 
+    auto closeRightAction = _contextPopupMenu->addAction(
+            QIcon::fromTheme(QStringLiteral("edit-rename")),
+            i18nc("@action:inmenu", "&Clother to the right..."), this,
+            [this]{ closeOtherToTerminalTab(_contextMenuTabIndex, true); }
+    );
+    closeRightAction->setObjectName(QStringLiteral("edit-rename"));
+
+
     auto closeAction = _contextPopupMenu->addAction(
         QIcon::fromTheme(QStringLiteral("tab-close")),
         i18nc("@action:inmenu", "Close Tab"), this,
@@ -431,7 +439,7 @@ void TabbedViewContainer::updateIcon(ViewProperties *item)
         setTabIcon(index, item->icon());
     }
 }
-#include <iostream>
+
 void TabbedViewContainer::closeOtherTerminalTab(int except_idx) {
     int rm_cnt = count();
     setCurrentIndex(except_idx);
@@ -441,6 +449,20 @@ void TabbedViewContainer::closeOtherTerminalTab(int except_idx) {
         closeTerminalTab(i);
     }
 
+}
+
+void TabbedViewContainer::closeOtherToTerminalTab(int except_idx, bool right) {
+    int rm_cnt = count();
+    setCurrentIndex(except_idx);
+    if (right) {
+        for (int i = except_idx + 1 ; i < rm_cnt ; i ++) {
+            closeTerminalTab(i);
+        }
+    } else {
+        for (int i = except_idx - 1 ; i >= 0 ; i --) {
+            closeTerminalTab(i);
+        }
+    }
 }
 
 void TabbedViewContainer::closeTerminalTab(int idx) {

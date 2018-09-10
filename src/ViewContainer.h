@@ -132,6 +132,7 @@ public:
     void closeCurrentTab();
     void wheelScrolled(int delta);
     void closeOtherTerminalTab(int except_idx);
+    void closeOtherToTerminalTab(int except_idx, bool right);
 
     void tabDoubleClicked(int index);
     void openTabContextMenu(const QPoint &point);
